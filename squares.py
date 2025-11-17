@@ -65,23 +65,38 @@ def convert_numbers(list_of_strings):
 
 
 if __name__ == "__main__":
-    # ----------------  新增 argparse 部分  ----------------
+    # ---------------- argparse 设置 ----------------
     parser = argparse.ArgumentParser(
-        description="Compute weighted average of squares (weights = None by default)."
+        description="Compute weighted average of squares."
     )
 
-    # 位置参数：numbers（至少一个）
+    # 位置参数：numbers
     parser.add_argument(
         "numbers",
         nargs="+",
-        help="Numbers from command line"
+        help="Input numbers"
+    )
+
+    # 可选参数：--weights
+    parser.add_argument(
+        "--weights",
+        nargs="*",
+        help="Optional weights corresponding to the input numbers",
+        default=None
     )
 
     args = parser.parse_args()
 
-    # 只读取 numbers，weights 仍为 None（题目要求）
+    # 转换 numbers
     numbers = convert_numbers(args.numbers)
 
-    result = average_of_squares(numbers, list_of_weights=None)
+    # 转换 weights（如果提供）
+    if args.weights is not None:
+        weights = convert_numbers(args.weights)
+    else:
+        weights = None   # 不提供则为 None
+
+    # 计算加权平方平均
+    result = average_of_squares(numbers, weights)
 
     print(result)
