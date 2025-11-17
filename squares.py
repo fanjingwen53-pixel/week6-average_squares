@@ -1,3 +1,4 @@
+import argparse
 """Computation of weighted average of squares.
 计算平方的加权平均值。
 """
@@ -64,15 +65,23 @@ def convert_numbers(list_of_strings):
 
 
 if __name__ == "__main__":
-    # 当脚本直接运行时执行以下部分
-    numbers_strings = ["1", "2", "4"]      # 数字字符串列表
-    weight_strings = ["1", "1", "1"]       # 权重字符串列表
+    # ----------------  新增 argparse 部分  ----------------
+    parser = argparse.ArgumentParser(
+        description="Compute weighted average of squares (weights = None by default)."
+    )
 
-    # 转换为数字
-    numbers = convert_numbers(numbers_strings)
-    weights = convert_numbers(weight_strings)
+    # 位置参数：numbers（至少一个）
+    parser.add_argument(
+        "numbers",
+        nargs="+",
+        help="Numbers from command line"
+    )
 
-    # 计算加权平均平方
-    result = average_of_squares(numbers, weights)
+    args = parser.parse_args()
 
-    print(result)  # 输出结果：7.0
+    # 只读取 numbers，weights 仍为 None（题目要求）
+    numbers = convert_numbers(args.numbers)
+
+    result = average_of_squares(numbers, list_of_weights=None)
+
+    print(result)
