@@ -63,40 +63,43 @@ def convert_numbers(list_of_strings):
     # 把字符串转成浮点数
     return [float(number_string) for number_string in all_numbers]
 
+def read_file_as_numbers(filename):
+    """Read a file and extract all numbers inside."""
+    with open(filename, "r") as f:
+        lines = f.readlines()
+    return convert_numbers(lines)
 
 if __name__ == "__main__":
     # ---------------- argparse 设置 ----------------
     parser = argparse.ArgumentParser(
-        description="Compute weighted average of squares."
+        description="Compute weighted average of squares from files."
     )
 
-    # 位置参数：numbers
+    # numbers 文件
     parser.add_argument(
-        "numbers",
-        nargs="+",
-        help="Input numbers"
+        "file_numbers",
+        help="Text file containing input numbers."
     )
 
-    # 可选参数：--weights
+    # 可选 weights 文件
     parser.add_argument(
         "--weights",
-        nargs="*",
-        help="Optional weights corresponding to the input numbers",
+        help="Text file containing weights (optional).",
         default=None
     )
 
     args = parser.parse_args()
 
-    # 转换 numbers
-    numbers = convert_numbers(args.numbers)
+    # 读取数字文件
+    numbers = read_file_as_numbers(args.file_numbers)
 
-    # 转换 weights（如果提供）
+    # 如果提供了 weights 文件，则读取
     if args.weights is not None:
-        weights = convert_numbers(args.weights)
+        weights = read_file_as_numbers(args.weights)
     else:
-        weights = None   # 不提供则为 None
+        weights = None
 
-    # 计算加权平方平均
+    # 计算结果
     result = average_of_squares(numbers, weights)
 
     print(result)
